@@ -1,6 +1,10 @@
 import express from 'express';
 import WebSocket from 'ws';
 import { PrismaClient } from '@prisma/client';
+import listenForTaskChanges from './tasks/tasks.websocket';
+
+import authController from './auth/auth.controller';
+import taskController from './tasks/tasks.controller';
 
 const prisma = new PrismaClient();
 
@@ -14,24 +18,15 @@ const server = app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
 
-const wss = new WebSocket.Server({ server });
-
-wss.on('connection', (ws) => {
-  console.log('WebSocket connection established');
-
-  ws.on('message', (message) => {
-    console.log(`Received message: ${message}`);
-    ws.send(`You sent: ${message}`);
-  });
-});
+listenForTaskChanges(server);
 
 app.get('/', (req, res) => {
   res.send('Hello, world!');
 });
 
-app.get('/users', async (req, res) => {
-  const users = await prisma.user.findMany();
-  res.json(users);
-});
+// register the auth controller
+app.use('/auth', authController);
+app.use('/tasks', taskController);
+
 
 // Add more routes as needed
