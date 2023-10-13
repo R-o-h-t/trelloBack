@@ -101,3 +101,36 @@ Authorization: Bearer {your_jwt_token}
   - 404 Not Found: Task not found.
 
 ---
+## How to run the Project : 
+### Requirement : 
+ - node
+ - Docker / Docker-Compose
+### environment variable: 
+example value for .env
+```
+JWT_SECRET = "5568939403705189298125114758439478033139439"
+# POSTGRES
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=postgres
+POSTGRES_PORT=5442
+
+DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:5442/postgres?schema=public"
+```
+### Dependencies
+``npm i``
+``npx prisma generate``
+
+### Database
+Database is a Postgresql DB initialised with docker-compose: 
+ - ``docker-compose up``
+ - ``npx prisma migrate dev``
+### run : 
+Run the project: 
+``npm run start``
+Run with hot reload : 
+``npm run dev``
+
+
+
+
